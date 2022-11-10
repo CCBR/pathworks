@@ -8,7 +8,10 @@
 <title>CCBR pathworks : visualize gene interactions </title>
 <style>
 body {
-    margin:8px;
+    margin-top: 2px; 
+    margin-bottom: 10px; 
+    margin-left: 10px; 
+    margin-right: 10px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI","Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans","Droid Sans", "Helvetica Neue", sans-serif;
     font-size: 18px;
     background-color: #fff;
@@ -19,12 +22,21 @@ body {
         height: 800px;
         border: 1px solid lightgray;
 }
+h3 { 
+    display: block;
+    font-size: 1.17em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}1
 </style>
 <!--<script src="vis-network.min.js"></script> -->
 <script src="vis-network.js"></script>
 </head>
 <body>
-<h3>&nbsp;&nbsp;CCBR pathworks : visualize gene interactions</h3>
+<h3>&nbsp;&nbsp;CCBR pathworks : visualize gene interactions (beta)</h3>
 <div id='texta'>
 <img src="logo.png" alt="brandlogo"><br>
 </div>
@@ -97,8 +109,9 @@ function htmlTitle(html) {
 <div id="mynetwork"></div>
 <h2 id="eventSpanHeading"></h2>
 <pre id="eventSpanContent"></pre>
+<pre id="moreinfo"></pre>
+<a href="help.html">help</a>
 <script>
-
 // create an array with nodes
 // nodes and edges will by dynamically created from webassembly
 var nodes = [];
@@ -175,13 +188,12 @@ network.stabilize(5000);
       });
       network.on("doubleClick", function (params) {
         params.event = "[original event]";
-        document.getElementById("eventSpanHeading").innerText =
-          "doubleClick event:";
-        document.getElementById("eventSpanContent").innerText = JSON.stringify(
-          params,
-          null,
-          4
-        );
+//        document.getElementById("eventSpanHeading").innerText = "doubleClick event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
 if (params.nodes.length === 1) {
      var node = nodes.get(params.nodes[0]);
      if(node.url != null) {
@@ -191,12 +203,12 @@ if (params.nodes.length === 1) {
       });
       network.on("oncontext", function (params) {
         params.event = "[original event]";
-        document.getElementById("eventSpanHeading").innerText = "oncontext (right click) event:";
-        document.getElementById("eventSpanContent").innerText = JSON.stringify(
-          params,
-          null,
-          4
-        );
+//        document.getElementById("eventSpanHeading").innerText = "oncontext (right click) event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
       });
       network.on("dragStart", function (params) {
         // There's no point in displaying this event on screen, it gets immediately overwritten
@@ -209,22 +221,21 @@ if (params.nodes.length === 1) {
       });
       network.on("dragging", function (params) {
         params.event = "[original event]";
-        document.getElementById("eventSpanHeading").innerText = "dragging event:";
-        document.getElementById("eventSpanContent").innerText = JSON.stringify(
-          params,
-          null,
-          4
-        );
+//        document.getElementById("eventSpanHeading").innerText = "dragging event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
       });
       network.on("dragEnd", function (params) {
         params.event = "[original event]";
-        document.getElementById("eventSpanHeading").innerText =
-          "dragEnd event:";
-        document.getElementById("eventSpanContent").innerText = JSON.stringify(
-          params,
-          null,
-          4
-        );
+//        document.getElementById("eventSpanHeading").innerText = "dragEnd event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
         console.log("dragEnd Event:", params);
         console.log(
           "dragEnd event, getNodeAt returns: " +
@@ -233,38 +244,38 @@ if (params.nodes.length === 1) {
       });
       network.on("controlNodeDragging", function (params) {
         params.event = "[original event]";
-        document.getElementById("eventSpanHeading").innerText = "control node dragging event:";
-        document.getElementById("eventSpanContent").innerText = JSON.stringify(
-          params,
-          null,
-          4
-        );
+//        document.getElementById("eventSpanHeading").innerText = "control node dragging event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
       });
       network.on("controlNodeDragEnd", function (params) {
         params.event = "[original event]";
-        document.getElementById("eventSpanHeading").innerText = "control node drag end event:";
-        document.getElementById("eventSpanContent").innerText = JSON.stringify(
-          params,
-          null,
-          4
-        );
+//        document.getElementById("eventSpanHeading").innerText = "control node drag end event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
         console.log("controlNodeDragEnd Event:", params);
       });
       network.on("zoom", function (params) {
-        document.getElementById("eventSpanHeading").innerText = "zoom event:";
-        document.getElementById("eventSpanContent").innerText = JSON.stringify(
-          params,
-          null,
-          4
-        );
+ //       document.getElementById("eventSpanHeading").innerText = "zoom event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
       });
       network.on("showPopup", function (params) {
-        document.getElementById("eventSpanHeading").innerText = "showPopup event: ";
-        document.getElementById("eventSpanContent").innerText = JSON.stringify(
-          params,
-          null,
-          4
-        );
+//        document.getElementById("eventSpanHeading").innerText = "showPopup event: ";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
       });
       network.on("hidePopup", function () {
         console.log("hidePopup Event");
@@ -297,6 +308,7 @@ if (params.nodes.length === 1) {
         console.log("blurEdge Event:", params);
       });
 }
+
 window.addEventListener('load', (event) => {
   console.log('Pathworks page is fully loaded.');
 });
