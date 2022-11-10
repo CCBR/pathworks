@@ -1238,11 +1238,12 @@ fprintf(stderr,"i = %d < %d = num_out_genes \n",i,num_out_genes); fflush(stderr)
         if (out_genes[i].color) strcpy(color,out_genes[i].color);
 
         sprintf(htmltitle,"htmlTitle(\"%s\")",out_genes[i].desc);
-        sprintf(t,
 #if 1
+        sprintf(t,
 "{id:%d,label:\"%s\",title:%s,url:\"genelinks.html?%s\",color:\"%s\"}",
                i+1, out_genes[i].hugo,htmltitle, out_genes[i].hugo, color);
 #else
+        sprintf(t,
 "{id:%d,label:\"%s\",title:%s,url:\"http://ccbrweb.nci.nih.gov/helix/apps/richtools/genelinks.html?%s\",color:\"%s\"}",
                i+1, out_genes[i].hugo,htmltitle, out_genes[i].hugo, color);
 #endif
@@ -1507,9 +1508,11 @@ void one_iter()
 
 #if PATHWORKS_USING_R
 #endif
+
 #if WASM_ON
 int main(int argc, char *argv[])
 {
+    fprintf(stderr,"in main\n"); fflush(NULL);
     pathworks_standard_setup();
     fprintf(stderr,"in main after pathworks_standard_setup()\n"); fflush(NULL);
     EM_ASM( allReady() );
