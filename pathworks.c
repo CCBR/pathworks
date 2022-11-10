@@ -1180,10 +1180,12 @@ fprintf(stderr,"i = %d < %d = num_out_genes \n",i,num_out_genes); fflush(stderr)
                // look like { id: 2, label: "A1CF", title: "A1CF popup" , url: "https://google.com/search?q=A1CF" },
         if (out_genes[i].color) strcpy(color,out_genes[i].color);
 
-        sprintf(t,
 // "{id: %d, label: \"%s\", title: \"%s\", url: \"http://ccbrweb.nci.nih.gov/helix/apps/richtools/genelinks.html?%s\",color:\"%s\" }",
+
+        sprintf(t,
 "{id: %d, label: \"%s\", title: \"%s\", url: \"genelinks.html?%s\",color:\"%s\" }",
                i+1, out_genes[i].hugo, out_genes[i].desc, out_genes[i].hugo, "#97c2fc");
+
         if (i < (num_out_genes-1)) 
             strcat(t,",");
         strcat(s,t);
