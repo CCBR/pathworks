@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang=en-us>
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="CCBR Pathworks">
+<meta name="keywords" content="biology, cancer, genomics , gene interactions, pathways, proteomics">
+<meta name="author" content="Richard Finney">
+<title>CCBR pathworks : visualize gene interactions </title>
+<style>
+body {
+    margin-top: 2px; 
+    margin-bottom: 10px; 
+    margin-left: 10px; 
+    margin-right: 10px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI","Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans","Droid Sans", "Helvetica Neue", sans-serif;
+    font-size: 18px;
+    background-color: #fff;
+    color: #333
+}
+#mynetwork {
+        width: 800px;
+        height: 800px;
+        border: 1px solid lightgray;
+}
+h3 { 
+    display: block;
+    font-size: 1.17em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}1
+</style>
+<!--<script src="vis-network.min.js"></script> -->
+<script src="vis-network.js"></script>
+</head>
+<body>
+<h3>&nbsp;&nbsp;CCBR pathworks : visualize gene interactions (beta)</h3>
+<div id='texta'>
+<img src="logo.png" alt="brandlogo"><br>
+</div>
+<div id='messages'>
+Loading ... 
+</div>
+<div id='report'>
+</div>
+<script>
+var ready=0; // get sets to 1 by main in the "c" program.  
+var network; // moved to global space by rpf
+var queryString;
+
+function submitX() {
+var v = document.getElementById("tinput").value;
+Module.ccall('pathworks_dump', [0],['string'],[v])
+}
+function redrawX() {
+    if (typeof network !== 'undefined') {
+console.log("network stabilize");
+    network.stabilize(100);
+    }
+    else {
+console.log("network not defined");
+    }
+}
+function eraseText() {
+    document.getElementById("tinput").value = "";
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function allReady() {
+console.log("in allReady js");
+         if (queryString.length>5) {
+document.getElementById('tinput').value = queryString;
+console.log("in allReady js submitX ");
+console.log("qs="+queryString);
+             submitX() 
+         }
+}
+
+var Module = {
+      onRuntimeInitialized: function() {
+         console.log('module loaded');
+         document.getElementById('messages').innerHTML='Enter Human Gene Symbols';
+         b=document.getElementById('texta');
+b.innerHTML='<textarea id=tinput cols="120" rows="10"></textarea><br><input type="submit" value="Submit" onclick="return submitX();">&nbsp;&nbsp;&nbsp;<input type="button" value="Clear" onclick="return eraseText();">&nbsp;&nbsp;Note: a large gene list may take a while to display.  </textarea><br><input type="submit" value="Redraw" onclick="return redrawX();">&nbsp;&nbsp;&nbsp;<br><textarea id=textra cols="30" rows="1"></textarea><br>';
+         queryString = window.location.search;
+      }
+}
+
+function htmlTitle(html) {
+    const container = document.createElement("div");
+    container.style.fontSize="9px";
+    container.innerHTML = html;
+    return container;
+// style="color: blue; font-size: 46px;"
+//    container.style.fontSize="xx-small";
+//  container.style.color = "red";
+//    container.style.fontSize = "15px";
+}
+
+</script>
+<script src="pathworks.js">
+</script>
+<script>
+</script>
+<div id="mynetwork"></div>
+<h2 id="eventSpanHeading"></h2>
+<pre id="eventSpanContent"></pre>
+<pre id="moreinfo"></pre>
+<a href="help.html">help</a>
+<script>
+// create an array with nodes
+// nodes and edges will by dynamically created from webassembly
+var nodes = [];
+var edges = [];
+
+function gon()
+{
+// pathworks 1 substitute start
+/*
+nodes and edges will look like this:
+nodes = new vis.DataSet([
+{ id: 2, label: "A1CF", title: "A1CF popup" , url: "https://google.com/search?q=A1CF" },
+{ id: 3, label: "ABAT", title: "ABAT popup" , url: "https://google.com/search?q=ABAT" },
+{ id: 4, label: "ABCA8", title: "ABCA8 popup" , url: "https://google.com/search?q=ABCA8" },
+{ id: 5, label: "AGMO", title: "AGMO popup" , url: "https://google.com/search?q=AGMO" },
+{ id: 6, label: "AGPAT2", title: "AGPAT2 popup" , url: "https://google.com/search?q=AGPAT2" }
+  ]);
+edges = new vis.DataSet([
+{ from: 3, to: 3 },
+{ from: 3, to: 4 },
+{ from: 2, to: 5 },
+{ from: 6, to: 6 }
+]);
+*/
+// pathworks 1 substitute end 
+      // create a network
+console.log("in gon()")
+console.log("nodes="+nodes)
+console.log("edges="+edges)
+      var container = document.getElementById("mynetwork");
+      var data = {
+        nodes: nodes,
+        edges: edges,
+      };
+
+      var options = {
+        interaction: { hover: true },
+        manipulation: {
+          enabled: true,
+        },
+/*
+        physics:{ 
+            stabilization: {
+            enabled: true,
+            iterations: 180, // maximum number of iteration to stabilize
+            updateInterval: 10,
+            onlyDynamicEdges: false,
+            fit: true,
+            }
+        },
+*/
+        physics:{ 
+            enabled: false,
+        },
+      };
+
+      network = new vis.Network(container, data, options);
+// hack ...
+network.stabilize(5000);
+
+      network.on("click", function (params) {
+        params.event = "[original event]";
+        document.getElementById("eventSpanHeading").innerText = "Click event:";
+        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+          params,
+          null,
+          4
+        );
+
+        console.log(
+          "click event, getNodeAt returns: " +
+            this.getNodeAt(params.pointer.DOM)
+        );
+      });
+      network.on("doubleClick", function (params) {
+        params.event = "[original event]";
+//        document.getElementById("eventSpanHeading").innerText = "doubleClick event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
+if (params.nodes.length === 1) {
+     var node = nodes.get(params.nodes[0]);
+     if(node.url != null) {
+       window.open(node.url, '_blank');
+     }
+    }
+      });
+      network.on("oncontext", function (params) {
+        params.event = "[original event]";
+//        document.getElementById("eventSpanHeading").innerText = "oncontext (right click) event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
+      });
+      network.on("dragStart", function (params) {
+        // There's no point in displaying this event on screen, it gets immediately overwritten
+        params.event = "[original event]";
+        console.log("dragStart Event:", params);
+        console.log(
+          "dragStart event, getNodeAt returns: " +
+            this.getNodeAt(params.pointer.DOM)
+        );
+      });
+      network.on("dragging", function (params) {
+        params.event = "[original event]";
+//        document.getElementById("eventSpanHeading").innerText = "dragging event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
+      });
+      network.on("dragEnd", function (params) {
+        params.event = "[original event]";
+//        document.getElementById("eventSpanHeading").innerText = "dragEnd event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
+        console.log("dragEnd Event:", params);
+        console.log(
+          "dragEnd event, getNodeAt returns: " +
+            this.getNodeAt(params.pointer.DOM)
+        );
+      });
+      network.on("controlNodeDragging", function (params) {
+        params.event = "[original event]";
+//        document.getElementById("eventSpanHeading").innerText = "control node dragging event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
+      });
+      network.on("controlNodeDragEnd", function (params) {
+        params.event = "[original event]";
+//        document.getElementById("eventSpanHeading").innerText = "control node drag end event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
+        console.log("controlNodeDragEnd Event:", params);
+      });
+      network.on("zoom", function (params) {
+ //       document.getElementById("eventSpanHeading").innerText = "zoom event:";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
+      });
+      network.on("showPopup", function (params) {
+//        document.getElementById("eventSpanHeading").innerText = "showPopup event: ";
+//        document.getElementById("eventSpanContent").innerText = JSON.stringify(
+//          params,
+//          null,
+//          4
+//        );
+      });
+      network.on("hidePopup", function () {
+        console.log("hidePopup Event");
+      });
+      network.on("select", function (params) {
+        console.log("select Event:", params);
+      });
+      network.on("selectNode", function (params) {
+        console.log("selectNode Event:", params);
+      });
+      network.on("selectEdge", function (params) {
+        console.log("selectEdge Event:", params);
+      });
+      network.on("deselectNode", function (params) {
+        console.log("deselectNode Event:", params);
+      });
+      network.on("deselectEdge", function (params) {
+        console.log("deselectEdge Event:", params);
+      });
+      network.on("hoverNode", function (params) {
+        console.log("hoverNode Event:", params);
+      });
+      network.on("hoverEdge", function (params) {
+        console.log("hoverEdge Event:", params);
+      });
+      network.on("blurNode", function (params) {
+        console.log("blurNode Event:", params);
+      });
+      network.on("blurEdge", function (params) {
+        console.log("blurEdge Event:", params);
+      });
+}
+
+window.addEventListener('load', (event) => {
+  console.log('Pathworks page is fully loaded.');
+});
+</script>
+</body>
+</html>
