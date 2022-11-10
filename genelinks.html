@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>CCBR - Gene Links</title>
+<meta name="description" content="CCBR - Gene Links"> 
+<meta name="keywords" content="Gene Links"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<style>
+body
+{
+    font-family:    Arial, Helvetica, sans-serif;
+    color : Black;
+}
+.small_text
+{
+    font-family:    Arial, Helvetica, sans-serif;
+    font-size:      8px;
+}
+</style>
+<script>
+var query = window.location.search;
+g=query.substring(1);
+console.log("gene:"+g);
+</script>
+</head>
+<body>
+<div id="main">
+main
+</div>
+<script>
+function gen_l(g,engine,u) { // generate link
+//console.log("g="+g); //console.log("u="+u);
+url=u+g;
+// document.getElementById("main").innerHTML += "<br>"+"<a href='"+url+"' target='_blank'>"+engine+"</a> " ;
+document.getElementById("main").innerHTML += "<br>"+"<a href='"+url+"'>"+engine+"</a> " ;
+document.getElementById("main").innerHTML += 
+            '&nbsp;<a href="' + url + '" target="_blank"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==" alt="launch"> </a>';
+}
+document.getElementById("main").innerHTML="Gene links for <b>"+g+"</b>:<br>";
+gen_l(g,'Biodeepsearch','http://ccbrweb.nci.nih.gov/helix/apps/richtools/biodeepsearch.html?');
+gen_l(g,'ProteinAtlas','https://www.proteinatlas.org/search/');
+gen_l(g,'Amigo2','http://amigo.geneontology.org/amigo/search/annotation?q=');
+gen_l(g,'Alphafold','https://alphafold.ebi.ac.uk/search/text/');
+gen_l(g,'Gene Cards','https://www.genecards.org/cgi-bin/carddisp.pl?gene=');
+gen_l(g,'NCBI Gene','https://www.ncbi.nlm.nih.gov/gene/?term=');
+gen_l(g,'Pubmed','https://pubmed.ncbi.nlm.nih.gov/?term=');
+gen_l(g,'DuckDuckGo','https://www.duckduckgo.com/?q=');
+gen_l(g,'Google','https://www.google.com/search?q=');
+gen_l(g,'Wikipedia','https://en.wikipedia.org/wiki/');
+gen_l(g,'UCSC','https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=');
+gen_l(g,'Cosmic','https://cancer.sanger.ac.uk/cosmic/search?q=');
+gen_l(g,'Brave','https://search.brave.com/search?q=');
+gen_l(g,'Mojeek','https://www.mojeek.com/search?q=');
+gen_l(g,'Gigablast','https://www.gigablast.com/search?c=main&q=');
+gen_l(g,'Bing','https://www.bing.com/search?q=');
+gen_l(g,'Qwant','https://www.qwant.com/?q=');
+gen_l(g,'Swisscows','https://swisscows.com/en/web?query=');
+gen_l(g,'Mesh','https://www.ncbi.nlm.nih.gov/mesh/?term=');
+</script>
+<br>
+<a href="http://ccbrweb.nci.nih.gov/helix/apps/richtools/ccbrwebtools.html">CCBR webtools</a>
+</body>
+</html>
